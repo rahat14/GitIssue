@@ -81,4 +81,12 @@ dependencies {
     implementation(libs.coil.compose)
     //markdown viewer
     implementation (libs.compose.markdown)
+    // Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
+
+    // Koin for dependency injection
+    implementation (libs.koin.android)
+    implementation (libs.koin.core)
 }
