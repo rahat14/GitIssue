@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.syntext.error.gitissue.ui.screen.RepoSearchScreen
-import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListScreen
+import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListContainer
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -18,16 +18,19 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
         composable<Screen.RepoSearchScreen> {
             RepoSearchScreen(
                 onNavigateToRepoList = { query ->
-                    navController.navigate(Screen.RepoListScreen(query = query))
+                    navController.navigate(Screen.SearchListContainer(query = query))
                 },
             )
         }
 
         // Repo List Screen
-        composable<Screen.RepoListScreen> {
-            val args = it.toRoute<Screen.RepoListScreen>()
-            SearchListScreen(
-                query = args.query
+        composable<Screen.SearchListContainer> {
+            val args = it.toRoute<Screen.SearchListContainer>()
+            SearchListContainer(
+                query = args.query,
+                onNavigateBack = {
+                    navController.navigateUp()
+                }
 //                onNavigateToProject = {
 //                    navController.navigate(Screen.ProjectScreen.route)
 //                }
@@ -48,7 +51,7 @@ sealed class Screen {
     data object RepoSearchScreen : Screen()
 
     @Serializable
-    data class RepoListScreen(
+    data class SearchListContainer(
         val query: String,
     ) : Screen()
 

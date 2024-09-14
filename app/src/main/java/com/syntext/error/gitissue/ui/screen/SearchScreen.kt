@@ -2,23 +2,18 @@ package com.syntext.error.gitissue.ui.screen
 
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,23 +31,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.syntext.error.gitissue.R
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.ui.theme.GitIssueTheme
-import com.syntext.error.gitissue.ui.theme.Orange
-import com.syntext.error.gitissue.ui.theme.TextColorGray
 
 
 @Composable
 fun RepoSearchScreen(
-    onNavigateToRepoList: (query : String ) -> Unit = {}
+    onNavigateToRepoList: (query: String) -> Unit = {}
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
 
@@ -127,7 +114,10 @@ fun RepoSearchScreen(
 
             SearchButton {
 
-                onNavigateToRepoList(searchText)
+                if(searchText.isNotEmpty()){
+                    Log.d("TAG", "RepoSearchScreen: $searchText")
+                    onNavigateToRepoList(searchText)
+                }
                 Log.d("TAG", "RepoSearchScreen: ")
 
             }

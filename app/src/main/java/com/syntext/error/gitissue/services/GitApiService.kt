@@ -14,7 +14,7 @@ interface GitApiService {
     suspend fun repoSearch(
         @Query("q") query: String,
         @Query("page") page: Int = 1 ,
-        @Query("per_page") perPage: Int = 12
+        @Query("per_page") perPage: Int = 16
     ): Response<RepoSearchResp>
 
 
@@ -30,7 +30,7 @@ interface GitApiService {
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Query("page") page: Int = 1 ,
-        @Query("per_page") perPage: Int = 12
+        @Query("per_page") perPage: Int = 16
     ): Response<IssueResp>
 
 
@@ -39,7 +39,7 @@ interface GitApiService {
     suspend fun searchRepoReadMe(
         @Query("q") query: String,
         @Query("page") page: Int = 1 ,
-        @Query("per_page") perPage: Int = 12
+        @Query("per_page") perPage: Int = 16
     ): Response<IssueResp>
 
 

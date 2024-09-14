@@ -6,14 +6,14 @@ import com.syntext.error.gitissue.networking.ApiResponse
 import com.syntext.error.gitissue.networking.safeApiCall
 import com.syntext.error.gitissue.services.GitApiService
 
-class GithubRemoteRepositoryImpl (private val apiService: GitApiService) : GithubRemoteRepository {
+class GithubRemoteRepositoryImpl(private val apiService: GitApiService) : GithubRemoteRepository {
 
     override suspend fun searchRepo(
         query: String,
         page: Int,
     ): ApiResponse<RepoSearchResp> {
         return safeApiCall {
-            apiService.repoSearch(query =   " " , page =  1)
+            apiService.repoSearch(query = query, page = page)
         }
     }
 

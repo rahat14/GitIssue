@@ -4,8 +4,9 @@ import com.syntext.error.gitissue.data.Repo
 
 
 data class SearchListState(
-    val isEmpty: Boolean = false,
-    val searchList: List<Repo> = emptyList(),
-    val isLoading: Boolean = false,
-
+    var isEmpty: Boolean = false,
+    var searchList: List<Repo> = emptyList(),
+    var isLoading: Boolean = false,
+    var errorMessage: String? = null,
+    var isLoadMore : Boolean = false
     )

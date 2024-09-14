@@ -89,5 +89,5 @@ dependencies {
     // Koin for dependency injection
     implementation (libs.koin.android)
     implementation (libs.koin.core)
-    implementation ("io.insert-koin:koin-androidx-compose:3.5.0")
+    implementation (libs.koin.androidx.compose)
 }
