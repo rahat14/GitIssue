@@ -1,7 +1,6 @@
 package com.syntext.error.gitissue.ui.screen
 
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -31,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.syntext.error.gitissue.common.EmptySpace
@@ -41,8 +43,8 @@ import com.syntext.error.gitissue.ui.theme.GitIssueTheme
 fun RepoSearchScreen(
     onNavigateToRepoList: (query: String) -> Unit = {}
 ) {
+    val focusManager = LocalFocusManager.current
     var searchText by rememberSaveable { mutableStateOf("") }
-
     Box(modifier = Modifier.fillMaxSize()) {
 
         Column(
@@ -93,6 +95,9 @@ fun RepoSearchScreen(
                     .fillMaxWidth()
                     .background(Color(0xFFF0F0F0), RoundedCornerShape(25.dp))
                     .clip(RoundedCornerShape(25.dp)),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Search // Set IME action to Search
+                ),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
@@ -100,25 +105,26 @@ fun RepoSearchScreen(
                     unfocusedIndicatorColor = Color.Transparent,
                     unfocusedPlaceholderColor = Color.Gray,
                     focusedContainerColor = Color.Transparent,
-
-                    ),
+                ),
                 keyboardActions = KeyboardActions(
+                    onSearch = {
+                        if (searchText.isNotEmpty()) {
+                            focusManager.clearFocus()
+                            onNavigateToRepoList(searchText)
+                        }
 
-                    onDone = {
-                        ///focusManager.clearFocus()
                     }
                 ),
+
             )
 
             EmptySpace()
 
             SearchButton {
-
-                if(searchText.isNotEmpty()){
-                    Log.d("TAG", "RepoSearchScreen: $searchText")
+                if (searchText.isNotEmpty()) {
+                    focusManager.clearFocus()
                     onNavigateToRepoList(searchText)
                 }
-                Log.d("TAG", "RepoSearchScreen: ")
 
             }
 
