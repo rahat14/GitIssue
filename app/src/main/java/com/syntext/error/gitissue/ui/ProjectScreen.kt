@@ -1,4 +1,4 @@
-package com.syntext.error.gitissue
+package com.syntext.error.gitissue.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,12 +27,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.Coil
-import coil.ImageLoader
+import com.syntext.error.gitissue.R
 
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.ui.theme.GitIssueTheme
@@ -207,7 +206,6 @@ fun ProjectSummaryScreen() {
 
 @Composable
 fun ProjectIssueListScreen() {
-
 
 }
 
