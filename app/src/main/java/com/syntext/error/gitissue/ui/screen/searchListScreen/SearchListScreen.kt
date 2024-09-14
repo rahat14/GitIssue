@@ -60,14 +60,13 @@ fun SearchListContainer() {
 
 
     Scaffold {
-
         SearchListScreen()
     }
 
 }
 
 @Composable
-fun SearchListScreen() {
+fun SearchListScreen(query : String = "" ) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 

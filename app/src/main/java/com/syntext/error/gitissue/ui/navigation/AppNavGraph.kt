@@ -5,25 +5,29 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.syntext.error.gitissue.ui.screen.RepoSearchScreen
 import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListScreen
+import kotlinx.serialization.Serializable
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen) {
 
         // Repo Search Screen
-        composable(Screen.RepoSearchScreen.route) {
-           RepoSearchScreen(
-//                onNavigateToRepoList = {
-//                    navController.navigate(Screen.RepoListScreen.route)
-//                }
+        composable<Screen.RepoSearchScreen> {
+            RepoSearchScreen(
+                onNavigateToRepoList = { query ->
+                    navController.navigate(Screen.RepoListScreen(query = query))
+                },
             )
         }
 
         // Repo List Screen
-        composable(Screen.RepoListScreen.route) {
+        composable<Screen.RepoListScreen> {
+            val args = it.toRoute<Screen.RepoListScreen>()
             SearchListScreen(
+                query = args.query
 //                onNavigateToProject = {
 //                    navController.navigate(Screen.ProjectScreen.route)
 //                }
@@ -38,10 +42,17 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 }
 
 
-sealed class Screen(val route: String) {
-    data object RepoSearchScreen : Screen("repo_search")
-    data object RepoListScreen : Screen("repo_list")
-    data object ProjectScreen : Screen("project")
-    data object DetailsScreen : Screen("details")
-    data object IssueScreen : Screen("issues")
+@Serializable
+sealed class Screen {
+    @Serializable
+    data object RepoSearchScreen : Screen()
+
+    @Serializable
+    data class RepoListScreen(
+        val query: String,
+    ) : Screen()
+
+    data object ProjectScreen : Screen()
+    data object DetailsScreen : Screen()
+    data object IssueScreen : Screen()
 }

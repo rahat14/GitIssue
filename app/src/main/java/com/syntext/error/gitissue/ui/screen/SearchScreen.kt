@@ -51,7 +51,9 @@ import com.syntext.error.gitissue.ui.theme.TextColorGray
 
 
 @Composable
-fun RepoSearchScreen() {
+fun RepoSearchScreen(
+    onNavigateToRepoList: (query : String ) -> Unit = {}
+) {
     var searchText by rememberSaveable { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -124,7 +126,10 @@ fun RepoSearchScreen() {
             EmptySpace()
 
             SearchButton {
+
+                onNavigateToRepoList(searchText)
                 Log.d("TAG", "RepoSearchScreen: ")
+
             }
 
         }
@@ -133,9 +138,6 @@ fun RepoSearchScreen() {
     }
 
 }
-
-
-
 
 
 @Composable
