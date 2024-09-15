@@ -1,9 +1,8 @@
 package com.syntext.error.gitissue.ui.screen.searchListScreen
 
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,13 +46,17 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean , onNavigateToProjectScreen: (Repo) -> Unit) {
+fun SearchListContainer(
+    query: String = "",
+    onNavigateBack: () -> Boolean,
+    onNavigateToProjectScreen: (Repo) -> Unit
+) {
 
     val viewModel: SearchListViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(query) {
         viewModel.postActions(SearchListAction.SearchRepo(query))
     }
 
@@ -62,60 +64,62 @@ fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean , onNa
 
     viewModel.actions.observeAsActions { searchListEvent ->
         when (searchListEvent) {
-           is SearchListEvent.NavigateBack -> {
+            is SearchListEvent.NavigateBack -> {
                 onNavigateBack()
             }
+
             is SearchListEvent.NavigateToProjectRepo -> onNavigateToProjectScreen(searchListEvent.repo)
         }
     }
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
 
         ) {
 
 
-            SearchListScreen(state.searchList, onLoadMore = {
-                if (!state.isLoadMore) {
-                    viewModel.postActions(
-                        action = SearchListAction.LoadMore(
-                            query
-                        )
+        SearchListScreen(state.searchList, isBottomLoading = state.isLoadMore, onLoadMore = {
+            if (!state.isLoadMore) {
+                viewModel.postActions(
+                    action = SearchListAction.LoadMore(
+                        query
                     )
-                } else {
-                    // show message
-
-                }
-            }, isBottomLoading = state.isLoadMore)
-
-            AnimatedVisibility(
-                state.isLoading
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    color = Color.White,
                 )
+            } else {
+                // show message
 
             }
+        }, onRepoTap = {
+            viewModel.postActions(SearchListAction.NavigateToProjectRepo(it))
 
-            AnimatedVisibility(
-                (state.isEmpty)
-            ) {
+        })
 
-                NoItemFoundContainer(
-                    onSearchAgain = {
-                        viewModel.postActions(SearchListAction.NavigateToSearchScreen)
-                    }
-                )
-            }
-
+        AnimatedVisibility(
+            state.isLoading
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.TopEnd),
+                color = Color.White,
+            )
 
         }
 
+        AnimatedVisibility(
+            (state.isEmpty)
+        ) {
 
+            NoItemFoundContainer(
+                onSearchAgain = {
+                    viewModel.postActions(SearchListAction.NavigateToSearchScreen)
+                }
+            )
+        }
+
+
+    }
 
 
 }
@@ -125,6 +129,7 @@ fun SearchListScreen(
     repoList: List<Repo> = emptyList(),
     isBottomLoading: Boolean = false,
     onLoadMore: () -> Unit,
+    onRepoTap: (repo: Repo) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -132,14 +137,13 @@ fun SearchListScreen(
     val reachedBottom: Boolean by remember {
         derivedStateOf {
             val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem?.index != 0 && lastVisibleItem?.index == listState.layoutInfo.totalItemsCount - 4 // buffer
+            lastVisibleItem?.index != 0 && lastVisibleItem?.index == listState.layoutInfo.totalItemsCount - 2 // buffer
         }
     }
 
     // load more if scrolled to bottom
     LaunchedEffect(reachedBottom) {
         if (reachedBottom) {
-            Log.d("TAG", "SearchListScreen:  calling for more data ")
             onLoadMore()
         }
     }
@@ -156,8 +160,10 @@ fun SearchListScreen(
             key = { repoList[it].id ?: 0 }
         ) { index ->
             RepoItem(
-                repo = repoList[index]
-            )
+                repo = repoList[index],
+            ) {
+                onRepoTap(it)
+            }
             if (index < repoList.lastIndex) {
                 HorizontalDivider()
             }
@@ -179,7 +185,7 @@ fun SearchListScreen(
 
 
 @Composable
-fun RepoItem(repo: Repo) {
+fun RepoItem(repo: Repo, onTap: (repo: Repo) -> Unit = {}) {
 
     Box(
         modifier = Modifier
@@ -187,6 +193,9 @@ fun RepoItem(repo: Repo) {
             .background(
                 color = MaterialTheme.colorScheme.onBackground
             )
+            .clickable {
+                onTap(repo)
+            }
             .padding(vertical = 8.dp),
     ) {
 

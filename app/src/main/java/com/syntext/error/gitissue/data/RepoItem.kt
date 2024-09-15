@@ -1,5 +1,8 @@
 package com.syntext.error.gitissue.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Repo(
     val allow_forking: Boolean? = null,
     val archive_url: String? = null,
@@ -82,6 +85,7 @@ data class Repo(
     val watchers_count: Int? = null,
     val web_commit_signoff_required: Boolean? = null
 ) {
+    @Serializable
     data class License(
         val key: String? = null,
         val name: String? = null,
@@ -89,6 +93,7 @@ data class Repo(
         val spdx_id: String? = null,
         val url: String? = null
     )
+    @Serializable
     data class Owner(
         val avatar_url: String? = null,
         val events_url: String? = null,

@@ -66,15 +66,24 @@ class SearchListViewmodel(
                 }
 
             }
+
             is SearchListAction.NavigateToProjectRepo -> {
 
                 _actions.trySend(SearchListEvent.NavigateToProjectRepo(action.repo))
             }
+
             is SearchListAction.SearchRepo -> {
 
-                _state.update {
-                    it.copy(isLoading = true)
+                if (_state.value.currentQuery == action.query) {
+                    return@launch
                 }
+
+
+                _state.update {
+
+                    it.copy(currentQuery = action.query , isLoading = true)
+                }
+
 
                 searchPage = 1
                 val response = gitRepo.searchRepo(query = action.query, page = searchPage)
@@ -107,6 +116,7 @@ class SearchListViewmodel(
 
                 }
             }
+
             SearchListAction.NavigateToSearchScreen -> {
 
                 _actions.trySend(SearchListEvent.NavigateBack)

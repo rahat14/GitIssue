@@ -8,5 +8,6 @@ data class SearchListState(
     var searchList: List<Repo> = emptyList(),
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
-    var isLoadMore : Boolean = false
-    )
+    var isLoadMore: Boolean = false,
+    var currentQuery: String? = null,
+)

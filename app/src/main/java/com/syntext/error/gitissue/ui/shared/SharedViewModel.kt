@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.asStateFlow
 class SharedViewModel(
 ) : ViewModel() {
 
-    private val _sharedState = MutableStateFlow<Repo?>(null)
-    val sharedState = _sharedState.asStateFlow()
+     var  sharedState : Repo? =  null
 
     fun updateState(repo: Repo) {
-        _sharedState.value = repo
+        sharedState = repo
+        println("ViewModel named ${repo.name}")
     }
 
     override fun onCleared() {

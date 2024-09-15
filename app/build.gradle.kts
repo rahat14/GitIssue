@@ -90,4 +90,5 @@ dependencies {
     implementation (libs.koin.android)
     implementation (libs.koin.core)
     implementation (libs.koin.androidx.compose)
+    implementation("io.insert-koin:koin-androidx-navigation:3.5.0")
 }

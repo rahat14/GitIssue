@@ -1,25 +1,27 @@
 package com.syntext.error.gitissue.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.syntext.error.gitissue.ui.screen.ProjectScreen
 import com.syntext.error.gitissue.ui.screen.RepoSearchScreen
+import com.syntext.error.gitissue.ui.screen.projectScreen.ProjectScreenContainer
 import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListContainer
 import com.syntext.error.gitissue.ui.shared.SharedViewModel
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
+    val sharedViewModel: SharedViewModel = koinViewModel()
+
     NavHost(navController = navController, startDestination = Screen.RepoSearchScreen) {
 
         // Repo Search Screen
@@ -33,7 +35,6 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
         // Repo List Screen
         composable<Screen.SearchListContainer> {
-            val viewModel = it.sharedViewModel<SharedViewModel>(navController)
             val args = it.toRoute<Screen.SearchListContainer>()
             SearchListContainer(
                 query = args.query,
@@ -41,21 +42,21 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
                     navController.navigateUp()
                 },
                 onNavigateToProjectScreen = { repo ->
-                    viewModel.updateState(repo)
-                    navController.navigate(Screen.ProjectScreen)
-                }
+                    sharedViewModel.updateState(repo)
+                    navController.navigate(Screen.ProjectScreenContainer) {
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                },
             )
         }
 
         // Project Screen with Bottom Navigation
-        composable<Screen.ProjectScreen> {
-            val viewModel = it.sharedViewModel<SharedViewModel>(navController)
-            val state by viewModel.sharedState.collectAsStateWithLifecycle()
+        composable<Screen.ProjectScreenContainer> {
 
-            val args = it.toRoute<Screen.ProjectScreen>()
 
-            ProjectScreen(
-                currentRepo = state
+            ProjectScreenContainer(
+                currentRepo = sharedViewModel.sharedState
 //                onNavigateToProject = {
 //                    navController.navigate(Screen.ProjectScreen.route)
 //                }
@@ -66,14 +67,13 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
-    navController: NavHostController,
-): T {
-    val navGraphRoute = destination.parent?.route ?: return viewModel()
+inline fun <reified T : ViewModel> NavBackStackEntry.koinSharedViewModel(navController: NavController): T {
+    val navGraphRoute = destination.parent?.route ?: return getViewModel<T>()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
-    return viewModel(parentEntry)
+
+    return getViewModel<T>(viewModelStoreOwner = parentEntry)
 }
 
 
@@ -87,7 +87,12 @@ sealed class Screen {
         val query: String,
     ) : Screen()
 
-    data object ProjectScreen : Screen()
+    @Serializable
+    data object ProjectScreenContainer : Screen()
+
+    @Serializable
     data object DetailsScreen : Screen()
+
+    @Serializable
     data object IssueScreen : Screen()
 }
