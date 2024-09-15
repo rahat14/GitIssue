@@ -167,7 +167,7 @@ fun SearchListContainer(
 @Composable
 fun SearchListScreen(
     modifier: Modifier = Modifier,
-    repoList: List<Repo> = emptyList(),
+            repoList: List<Repo> = emptyList(),
     isBottomLoading: Boolean = false,
     onLoadMore: () -> Unit,
     onRepoTap: (repo: Repo) -> Unit

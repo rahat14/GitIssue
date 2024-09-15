@@ -25,8 +25,8 @@ interface GitApiService {
     ): Response<RepoReadMeResp>
 
 
-    @GET("/repos/{owner}/{repo}/readme")
-    suspend fun repoReadMe(
+    @GET("/repos/{owner}/{repo}/issues")
+    suspend fun repoIssues(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Query("page") page: Int = 1 ,
@@ -36,7 +36,7 @@ interface GitApiService {
 
 //https://api.github.com/search/issues?q=issue+repo:ollama/ollama
     @GET("/search/issues")
-    suspend fun searchRepoReadMe(
+    suspend fun searchRepoIssues(
         @Query("q") query: String,
         @Query("page") page: Int = 1 ,
         @Query("per_page") perPage: Int = 16

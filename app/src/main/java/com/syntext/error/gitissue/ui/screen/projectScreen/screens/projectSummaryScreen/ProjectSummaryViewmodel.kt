@@ -47,7 +47,6 @@ class ProjectSummaryViewmodel(
                     gitRepo.getRepoReadme(repoName = action.repoName, owner = action.owner)
 
                 when (response) {
-                    ///TODO detect end
 
                     is ApiResponse.Success -> {
 
