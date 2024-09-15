@@ -58,10 +58,6 @@ class SearchListViewmodel(
                         }
                     }
 
-                    ApiResponse.Loading -> {
-                        _state.update { it.copy(isLoadMore = true) }
-                    }
-
 
                 }
 
@@ -109,9 +105,7 @@ class SearchListViewmodel(
                         }
                     }
 
-                    ApiResponse.Loading -> {
-                        _state.update { it.copy(isLoading = true) }
-                    }
+
 
 
                 }

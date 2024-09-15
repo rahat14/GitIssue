@@ -3,6 +3,7 @@ package com.syntext.error.gitissue.di
 import com.syntext.error.gitissue.networking.RetrofitInstance
 import com.syntext.error.gitissue.repository.GithubRemoteRepository
 import com.syntext.error.gitissue.repository.GithubRemoteRepositoryImpl
+import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryViewmodel
 import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListViewmodel
 import com.syntext.error.gitissue.ui.shared.SharedViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,4 +18,5 @@ val appModule = module {
     // Provide ViewModel
     viewModel { SearchListViewmodel(get()) }
     viewModel { SharedViewModel() }
+    viewModel { ProjectSummaryViewmodel(get()) }
 }

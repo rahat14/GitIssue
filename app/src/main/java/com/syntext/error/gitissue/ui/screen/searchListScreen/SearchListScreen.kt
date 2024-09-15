@@ -59,6 +59,9 @@ fun SearchListContainer(
     LaunchedEffect(query) {
         viewModel.postActions(SearchListAction.SearchRepo(query))
     }
+ LaunchedEffect(query) {
+        viewModel.postActions(SearchListAction.SearchRepo(query))
+    }
 
 
 
