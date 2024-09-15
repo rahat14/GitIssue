@@ -1,4 +1,4 @@
-package com.syntext.error.gitissue.ui.theme
+ package com.syntext.error.gitissue.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

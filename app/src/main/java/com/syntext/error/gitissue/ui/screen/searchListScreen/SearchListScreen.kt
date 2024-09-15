@@ -6,20 +6,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,6 +53,7 @@ import com.syntext.error.gitissue.utils.observeAsActions
 import org.koin.androidx.compose.koinViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchListContainer(
     query: String = "",
@@ -59,9 +68,7 @@ fun SearchListContainer(
     LaunchedEffect(query) {
         viewModel.postActions(SearchListAction.SearchRepo(query))
     }
- LaunchedEffect(query) {
-        viewModel.postActions(SearchListAction.SearchRepo(query))
-    }
+
 
 
 
@@ -78,27 +85,57 @@ fun SearchListContainer(
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.statusBars),
         contentAlignment = Alignment.Center,
 
         ) {
 
-
-        SearchListScreen(state.searchList, isBottomLoading = state.isLoadMore, onLoadMore = {
-            if (!state.isLoadMore) {
-                viewModel.postActions(
-                    action = SearchListAction.LoadMore(
-                        query
+        SearchListScreen(
+            modifier = Modifier.padding(top = 64.dp),
+            repoList = state.searchList,
+            isBottomLoading = state.isLoadMore,
+            onLoadMore = {
+                if (!state.isLoadMore) {
+                    viewModel.postActions(
+                        action = SearchListAction.LoadMore(
+                            query
+                        )
                     )
-                )
-            } else {
-                // show message
+                } else {
+                    // show message
+
+                }
+            },
+            onRepoTap = {
+                viewModel.postActions(SearchListAction.NavigateToProjectRepo(it))
 
             }
-        }, onRepoTap = {
-            viewModel.postActions(SearchListAction.NavigateToProjectRepo(it))
+        )
 
-        })
+        TopAppBar(
+            title = {
+                Text(
+                    "Result For '$query'", color = Color.White,
+                    fontSize = 14.sp
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { onNavigateBack() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color(0xff161616)
+            ),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .background(Color.White)
+        )
 
         AnimatedVisibility(
             state.isLoading
@@ -129,6 +166,7 @@ fun SearchListContainer(
 
 @Composable
 fun SearchListScreen(
+    modifier: Modifier = Modifier,
     repoList: List<Repo> = emptyList(),
     isBottomLoading: Boolean = false,
     onLoadMore: () -> Unit,
@@ -153,7 +191,7 @@ fun SearchListScreen(
 
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         state = listState
     ) {

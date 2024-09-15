@@ -1,7 +1,9 @@
 package com.syntext.error.gitissue.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -19,17 +21,18 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController = rememberNavController()) {
+fun AppNavGraph(navController: NavHostController = rememberNavController() , modifier: Modifier = Modifier) {
     val sharedViewModel: SharedViewModel = koinViewModel()
 
-    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen) {
+    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen ) {
 
         // Repo Search Screen
         composable<Screen.RepoSearchScreen> {
             RepoSearchScreen(
                 onNavigateToRepoList = { query ->
                     navController.navigate(Screen.SearchListContainer(query = query))
-                },
+                    Log.d("TAG", "AppNavGraph : ${navController.currentDestination?.displayName.toString()} ${navController.currentDestination?.parent} ${navController.currentDestination?.navigatorName}")
+                                       },
             )
         }
 
@@ -53,10 +56,11 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
         // Project Screen with Bottom Navigation
         composable<Screen.ProjectScreenContainer> {
-
-
             ProjectScreenContainer(
-                currentRepo = sharedViewModel.sharedState
+                currentRepo = sharedViewModel.sharedState,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
 //                onNavigateToProject = {
 //                    navController.navigate(Screen.ProjectScreen.route)
 //                }

@@ -1,4 +1,4 @@
-package com.syntext.error.gitissue.ui.screen.projectScreen.screens
+package com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -34,10 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.syntext.error.gitissue.common.EmptySpace
+import com.syntext.error.gitissue.common.MarkDownViewer
 import com.syntext.error.gitissue.data.Repo
-import com.syntext.error.gitissue.ui.screen.projectScreen.MarkDownViewer
-import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryAction
-import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryViewmodel
 import com.syntext.error.gitissue.ui.theme.Orange
 import com.syntext.error.gitissue.ui.theme.TextColorGray
 import org.koin.androidx.compose.koinViewModel
@@ -56,7 +54,6 @@ fun ProjectSummaryScreen(currentRepo: Repo?) {
             )
         )
     }
-
 
 
     Box(
