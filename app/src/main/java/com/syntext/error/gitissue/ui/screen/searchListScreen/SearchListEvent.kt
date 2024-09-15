@@ -1,7 +1,9 @@
 package com.syntext.error.gitissue.ui.screen.searchListScreen
 
-interface SearchListEvent {
+import com.syntext.error.gitissue.data.Repo
 
-    data object NavigateToProjectRepo : SearchListEvent
+sealed  interface SearchListEvent {
+
+    data class NavigateToProjectRepo(val repo : Repo) : SearchListEvent
     data object NavigateBack : SearchListEvent
 }

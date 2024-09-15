@@ -1,6 +1,7 @@
 package com.syntext.error.gitissue.ui.screen.searchListScreen
 
 import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -47,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean) {
+fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean , onNavigateToProjectScreen: (Repo) -> Unit) {
 
     val viewModel: SearchListViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -61,24 +62,19 @@ fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean) {
 
     viewModel.actions.observeAsActions { searchListEvent ->
         when (searchListEvent) {
-            SearchListEvent.NavigateBack -> {
+           is SearchListEvent.NavigateBack -> {
                 onNavigateBack()
             }
-
-            SearchListEvent.NavigateToProjectRepo -> {
-
-            }
-
+            is SearchListEvent.NavigateToProjectRepo -> onNavigateToProjectScreen(searchListEvent.repo)
         }
     }
 
 
-    Scaffold { innerPadding ->
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+
         ) {
 
 
@@ -120,7 +116,7 @@ fun SearchListContainer(query: String = "", onNavigateBack: () -> Boolean) {
         }
 
 
-    }
+
 
 }
 

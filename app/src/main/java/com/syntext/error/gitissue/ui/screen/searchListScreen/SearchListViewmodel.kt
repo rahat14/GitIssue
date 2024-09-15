@@ -66,8 +66,10 @@ class SearchListViewmodel(
                 }
 
             }
+            is SearchListAction.NavigateToProjectRepo -> {
 
-            is SearchListAction.NavigateToProjectRepo -> {}
+                _actions.trySend(SearchListEvent.NavigateToProjectRepo(action.repo))
+            }
             is SearchListAction.SearchRepo -> {
 
                 _state.update {
@@ -105,7 +107,6 @@ class SearchListViewmodel(
 
                 }
             }
-
             SearchListAction.NavigateToSearchScreen -> {
 
                 _actions.trySend(SearchListEvent.NavigateBack)

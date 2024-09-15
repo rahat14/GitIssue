@@ -1,4 +1,4 @@
-package com.syntext.error.gitissue.ui
+package com.syntext.error.gitissue.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,11 +34,17 @@ import coil.Coil
 import com.syntext.error.gitissue.R
 
 import com.syntext.error.gitissue.common.EmptySpace
+import com.syntext.error.gitissue.data.Repo
 import com.syntext.error.gitissue.ui.theme.GitIssueTheme
 import com.syntext.error.gitissue.ui.theme.Orange
 import com.syntext.error.gitissue.ui.theme.TextColorGray
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
+
+@Composable
+fun ProjectScreen(currentRepo: Repo?) {
+
+}
 
 @Composable
 fun ProjectSummaryScreen() {
@@ -53,9 +59,11 @@ fun ProjectSummaryScreen() {
     ) {
         val modifier = Modifier.padding(horizontal = 8.dp)
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        ) {
 
             EmptySpace(4)
 
@@ -156,10 +164,12 @@ fun ProjectSummaryScreen() {
                     color = Color.White.copy(alpha = 0.7f)
                 )
 
-                Box(modifier = Modifier
-                    .size(10.dp)
-                    .clip(CircleShape)
-                    .background(Color.Cyan)) {}
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(Color.Cyan)
+                ) {}
 
                 EmptySpace(6)
 
@@ -180,7 +190,7 @@ fun ProjectSummaryScreen() {
             }
 
             HorizontalDivider(
-                thickness = 1.dp ,
+                thickness = 1.dp,
                 color = Color.White.copy(alpha = 0.5f),
                 modifier = Modifier.padding(vertical = 8.dp)
             )
@@ -229,17 +239,18 @@ fun ProjectSummaryScreenPreview() {
 }
 
 
-
 @Composable
-fun  MarkDownViewer(modifier: Modifier = Modifier){
-val markdown = "### What is the issue?\n\nI have set the system parameters, but when loading the embedding model, only one is still in effect. I copied this model, and surprisingly, their model IDs are the same. After importing the model, the model ID changed, but the same model was still used in the end。\r\n![image](https://github.com/user-attachments/assets/e331defe-5548-479b-a5de-32a3d8d1de4d)\r\n\r\n\n\n### OS\n\nWindows\n\n### GPU\n\nNvidia\n\n### CPU\n\nIntel\n\n### Ollama version\n\n0.3.10"
+fun MarkDownViewer(modifier: Modifier = Modifier) {
+    val markdown =
+        "### What is the issue?\n\nI have set the system parameters, but when loading the embedding model, only one is still in effect. I copied this model, and surprisingly, their model IDs are the same. After importing the model, the model ID changed, but the same model was still used in the end。\r\n![image](https://github.com/user-attachments/assets/e331defe-5548-479b-a5de-32a3d8d1de4d)\r\n\r\n\n\n### OS\n\nWindows\n\n### GPU\n\nNvidia\n\n### CPU\n\nIntel\n\n### Ollama version\n\n0.3.10"
 
-val ctx = LocalContext.current
+    val ctx = LocalContext.current
     MarkdownText(
-        modifier = Modifier.fillMaxWidth()
-            .padding( 8.dp),
-        markdown =  markdown,
-     //   fontResource = R.font.montserrat_medium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        markdown = markdown,
+        //   fontResource = R.font.montserrat_medium,
         style = TextStyle(
             color = Color.White,
             fontSize = 12.sp,
@@ -247,11 +258,7 @@ val ctx = LocalContext.current
 
         imageLoader = Coil.imageLoader(ctx)
 
-        )
-
-
-
-
+    )
 
 
 }
