@@ -2,7 +2,7 @@
  A Kotlin Apporch to list and search gitub repos with their repo search. 
  
 # Tech stack & Open-source libraries
-- 100% [Kotlin](https://kotlinlang.org/) based, [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
+- 100% [Kotlin](https://kotlinlang.org/) based, [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) for asynchronous.
 - JetPack Compose 🚀
 - [Koin](https://github.com/InsertKoinIO/koin) - dependency injection framework used to manage components and modules.
 - [Ballast](https://github.com/copper-leaf/ballast) - For managing UI state and effects using the MVI pattern.
