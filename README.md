@@ -17,6 +17,8 @@
 - MVI Architecture (Model - View - Intent)
 - Repository pattern
 
+#Api Key 
+- ApiKey.properties contains a demo GitHub API key to resolve the rate limit on GitHub API And will be removed once review is done
 
 # Demo
 <p align="center">
