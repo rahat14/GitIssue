@@ -18,7 +18,7 @@
 - Repository pattern
 
 #Api Key 
-- ApiKey.properties contains a demo GitHub API key to resolve the rate limit on GitHub API And will be removed once review is done
+- ApiKey.properties contains a demo GitHub API key to resolve the rate limit on GitHub API And will be removed once the review is done [Github removed the key]
 
 # Demo
 <p align="center">
@@ -27,6 +27,10 @@
    <img src="preview/preview (3).png" alt="Search Screen" width="250"/>
 
 </p>
+
+# Video demo
+
+[![Video](https://i.sstatic.net/Vp2cE.png)](https://drive.google.com/file/d/15BF83K36eV7ByyfKilOl8s1Ly-kTUsYR/view)
 
 
 TODO
