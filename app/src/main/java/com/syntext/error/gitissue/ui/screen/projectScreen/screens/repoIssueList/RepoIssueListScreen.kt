@@ -179,7 +179,7 @@ fun ProjectIssueListScreenContent(
 
     // load more if scrolled to bottom
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && issueList.size > 16) {
+        if (reachedBottom && issueList.size >= 16) {
             onLoadMore()
         }
     }

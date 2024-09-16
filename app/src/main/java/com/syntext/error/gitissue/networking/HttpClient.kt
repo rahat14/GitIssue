@@ -23,7 +23,7 @@ class HttpClient {
                     chain.request().newBuilder().also {
                         it.addHeader("Accept", "application/json")
                         it.addHeader("User-Agent", "Git-Issue")
-                        it.addHeader("Authorization", "token $consumerKey")
+                        //it.addHeader("Authorization", "token $consumerKey")
                     }
 
                         .build()
