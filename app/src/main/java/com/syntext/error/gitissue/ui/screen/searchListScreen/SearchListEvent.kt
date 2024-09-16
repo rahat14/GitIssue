@@ -6,4 +6,6 @@ sealed  interface SearchListEvent {
 
     data class NavigateToProjectRepo(val repo : Repo) : SearchListEvent
     data object NavigateBack : SearchListEvent
+    data class ShowMsg(val message : String ) : SearchListEvent
+    data object DoNothing : SearchListEvent
 }

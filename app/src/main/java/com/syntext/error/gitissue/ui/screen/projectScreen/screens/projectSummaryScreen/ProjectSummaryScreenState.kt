@@ -6,4 +6,6 @@ import com.syntext.error.gitissue.data.Repo
 data class ProjectSummaryScreenState(
     var readme : String = "",
     var isLoading: Boolean = false,
+    var errorMessage: String? =  null,
+
 )

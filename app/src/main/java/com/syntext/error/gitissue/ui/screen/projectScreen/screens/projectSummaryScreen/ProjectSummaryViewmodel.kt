@@ -60,6 +60,7 @@ class ProjectSummaryViewmodel(
                         _state.update {
                             it.copy(
                                 isLoading = false,
+                                errorMessage = response.message
                             )
                         }
                     }
@@ -73,6 +74,19 @@ class ProjectSummaryViewmodel(
                 _state.update {
                     it.copy(isLoading = false , readme = action.readme)
                 }
+
+            }
+
+            ProjectSummaryAction.InitDoNothing -> {
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+
+
 
             }
         }

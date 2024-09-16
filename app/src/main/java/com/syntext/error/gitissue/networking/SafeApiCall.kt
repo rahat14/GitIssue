@@ -13,7 +13,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): ApiResponse<T> 
             when (response.code()) {
                 404 -> ApiResponse.Error(Throwable("Resource not found"))
                 500 -> ApiResponse.Error(Throwable("Server error"))
-                else -> ApiResponse.Error(Throwable("Error: ${response.code()} ${response.message()}"))
+                else -> ApiResponse.Error(Throwable("Error with State Code ${response.code()} ${response.message()}"))
             }
         }
     } catch (e: Exception) {

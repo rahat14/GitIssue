@@ -1,5 +1,6 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,12 +23,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.syntext.error.gitissue.common.CommonDialog
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.NoItemFoundContainer
 import com.syntext.error.gitissue.data.IssueResp
 import com.syntext.error.gitissue.data.Repo
+import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryEvent
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.widgets.IssueItem
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.widgets.TopBarWithSearch
+import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListAction
+import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListEvent
+import com.syntext.error.gitissue.utils.observeAsActions
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -51,6 +57,24 @@ fun ProjectIssueListScreen(
                 )
             )
         }
+    }
+
+    viewModel.actions.observeAsActions { repoIssueEvent ->
+        when (repoIssueEvent) {
+
+            ProjectSummaryEvent.DoNothing -> {
+
+            }
+        }
+    }
+
+    if(state.errorMessage != null){
+        CommonDialog(
+            message = state.errorMessage ?: "" ,
+            onConfirm = {
+                viewModel.postActions(RepoIssuesAction.InitDoNothing)
+            },
+        )
     }
 
     Box(

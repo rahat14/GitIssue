@@ -34,7 +34,7 @@ class GithubRemoteRepositoryImpl(private val apiService: GitApiService) : Github
         }
     }
 
-    //  issue+repo:ollama/ollama
+
     override suspend fun searchRepoIssues(
         repoName: String,
         owner: String,

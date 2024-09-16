@@ -1,5 +1,6 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,11 +42,15 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.syntext.error.gitissue.R
 import com.syntext.error.gitissue.common.AppBar
+import com.syntext.error.gitissue.common.CommonDialog
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.MarkDownViewer
 import com.syntext.error.gitissue.data.Repo
+import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListAction
+import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListEvent
 import com.syntext.error.gitissue.ui.theme.Orange
 import com.syntext.error.gitissue.ui.theme.TextColorGray
+import com.syntext.error.gitissue.utils.observeAsActions
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -53,6 +58,22 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
 
     val viewModel: ProjectSummaryViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
+
+    viewModel.actions.observeAsActions { projectSummeryEvent ->
+        when (projectSummeryEvent) {
+            ProjectSummaryEvent.DoNothing ->{}
+        }
+    }
+
+    if(state.errorMessage != null){
+        CommonDialog(
+            message = state.errorMessage ?: "" ,
+            onConfirm = {
+                viewModel.postActions(ProjectSummaryAction.InitDoNothing)
+            },
+        )
+    }
+
 
     LaunchedEffect(currentRepo) {
         viewModel.postActions(

@@ -1,5 +1,6 @@
 package com.syntext.error.gitissue.ui.screen.searchListScreen
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,11 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.syntext.error.gitissue.common.CommonDialog
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.NoItemFoundContainer
 import com.syntext.error.gitissue.data.Repo
@@ -63,13 +66,11 @@ fun SearchListContainer(
 
     val viewModel: SearchListViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
-
+    val ctx = LocalContext.current
 
     LaunchedEffect(query) {
         viewModel.postActions(SearchListAction.SearchRepo(query))
     }
-
-
 
 
     viewModel.actions.observeAsActions { searchListEvent ->
@@ -79,7 +80,27 @@ fun SearchListContainer(
             }
 
             is SearchListEvent.NavigateToProjectRepo -> onNavigateToProjectScreen(searchListEvent.repo)
+
+            is SearchListEvent.ShowMsg -> {
+
+                Toast.makeText(ctx, searchListEvent.message, Toast.LENGTH_LONG).show()
+                viewModel.postActions(SearchListAction.InitDoNothing)
+
+            }
+
+            SearchListEvent.DoNothing ->{
+
+            }
         }
+    }
+
+    if(state.errorMessage != null){
+        CommonDialog(
+            message = state.errorMessage ?: "" ,
+            onConfirm = {
+                viewModel.postActions(SearchListAction.InitDoNothing)
+            },
+        )
     }
 
 

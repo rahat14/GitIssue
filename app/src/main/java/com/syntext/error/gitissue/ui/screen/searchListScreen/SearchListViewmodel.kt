@@ -37,15 +37,22 @@ class SearchListViewmodel(
 
                 val response = gitRepo.searchRepo(query = action.query, page = searchPage)
 
+
                 when (response) {
-                    ///TODO detect end
+
 
                     is ApiResponse.Success -> {
+
+
                         _state.update {
                             it.copy(
                                 searchList = it.searchList + (response.data.items ?: emptyList()),
                                 isLoadMore = false
                             )
+                        }
+
+                        if (response.data.items.isNullOrEmpty()) {
+                            _actions.trySend(SearchListEvent.ShowMsg(message = "You Are At The End."))
                         }
                     }
 
@@ -61,6 +68,7 @@ class SearchListViewmodel(
 
                 }
 
+
             }
 
             is SearchListAction.NavigateToProjectRepo -> {
@@ -70,6 +78,7 @@ class SearchListViewmodel(
 
             is SearchListAction.SearchRepo -> {
 
+
                 if (_state.value.currentQuery == action.query) {
                     return@launch
                 }
@@ -77,7 +86,7 @@ class SearchListViewmodel(
 
                 _state.update {
 
-                    it.copy(currentQuery = action.query , isLoading = true)
+                    it.copy(currentQuery = action.query, isLoading = true)
                 }
 
                 searchPage = 1
@@ -104,14 +113,21 @@ class SearchListViewmodel(
                     }
 
 
-
-
                 }
             }
 
             SearchListAction.NavigateToSearchScreen -> {
 
                 _actions.trySend(SearchListEvent.NavigateBack)
+
+            }
+
+            SearchListAction.InitDoNothing -> {
+
+                _state.update {
+                    it.copy(errorMessage = null)
+                }
+                _actions.trySend(SearchListEvent.DoNothing)
 
             }
         }

@@ -182,6 +182,7 @@ class RepoIssueViewmodel(
                                 isLoading = false
                             )
                         }
+
                     }
 
                 }
@@ -192,6 +193,14 @@ class RepoIssueViewmodel(
                 _state.update {
                     it.copy(isSearchOn = false, currentSearchList = emptyList())
                 }
+            }
+
+            RepoIssuesAction.InitDoNothing -> {
+
+                _state.update {
+                    it.copy(errorMessage = null)
+                }
+
             }
         }
     }
