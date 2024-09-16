@@ -21,10 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.syntext.error.gitissue.common.AppBar
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.MarkDownViewer
-import com.syntext.error.gitissue.ui.screen.projectScreen.AppBar
-import com.syntext.error.gitissue.ui.theme.TextColorGray
 
 @Composable
 fun IssueDetailsScreen(
@@ -42,15 +41,18 @@ fun IssueDetailsScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
     ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 8.dp)
-        ) {
 
+
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 8.dp)
+        ) {
             AppBar(
                 title = "Issue Details",
                 onNavigateBack = { onNavigateBack() },
-
-                )
+                modifier = Modifier
+            )
 
             EmptySpace(8)
 
@@ -69,14 +71,14 @@ fun IssueDetailsScreen(
                     model = userImage,
                     contentDescription = "",
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(22.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
 
                 Text(
                     userName,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 4.dp),
                     color = Color.White
                 )

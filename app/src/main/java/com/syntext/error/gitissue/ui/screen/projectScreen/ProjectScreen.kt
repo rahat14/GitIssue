@@ -139,7 +139,9 @@ fun ProjectNavHost(
 
         // Details Screen
         composable<Screen.DetailsScreen> {
-            ProjectSummaryScreen(currentRepo)
+            ProjectSummaryScreen(currentRepo) {
+                onNavigateBack()
+            }
         }
 
         // Issue Screen
@@ -202,48 +204,6 @@ sealed class BottomNavItem(
         Screen.IssueScreen
     )
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppBar(title: String, onNavigateBack: () -> Unit) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-//    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
-
-//    Log.d(
-//        "TAG",
-//        "onCreate:  ${Screen::class.qualifiedName} ${navController.currentDestination?.route.toString()}"
-//    )
-    //   if (currentDestination?.route == Screen.IssueScreen::class.qualifiedName) {
-    TopAppBar(
-        title = {
-            Text(
-                text = title,
-                color = Color.White,
-                fontSize = 14.sp
-            )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xff161616)
-        ),
-
-        navigationIcon = {
-            IconButton(onClick = {
-                onNavigateBack()
-            }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Localized description",
-                    tint = Color.White
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-    //  }
-
-}
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

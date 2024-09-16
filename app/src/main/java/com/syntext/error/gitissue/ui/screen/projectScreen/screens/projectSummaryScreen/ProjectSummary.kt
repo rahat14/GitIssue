@@ -1,14 +1,18 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -28,11 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.syntext.error.gitissue.R
+import com.syntext.error.gitissue.common.AppBar
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.MarkDownViewer
 import com.syntext.error.gitissue.data.Repo
@@ -41,7 +49,7 @@ import com.syntext.error.gitissue.ui.theme.TextColorGray
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProjectSummaryScreen(currentRepo: Repo?) {
+fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
 
     val viewModel: ProjectSummaryViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -59,17 +67,24 @@ fun ProjectSummaryScreen(currentRepo: Repo?) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.onBackground
             )
-    ) {
+            .windowInsetsPadding(WindowInsets.statusBars),
+
+        ) {
         val modifier = Modifier.padding(horizontal = 8.dp)
+
+        AppBar(
+            modifier = Modifier.align(Alignment.TopCenter),
+            title = currentRepo?.name ?: "n?a"
+        ) { onNavigateBack() }
+
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(top = 64.dp)
                 .verticalScroll(rememberScrollState())
         ) {
 
@@ -124,7 +139,7 @@ fun ProjectSummaryScreen(currentRepo: Repo?) {
                     Icons.Rounded.Share,
                     contentDescription = "share icon",
                     modifier = Modifier.size(16.dp),
-                    tint = Orange
+                    tint = Color.White
                 )
 
 
@@ -154,7 +169,7 @@ fun ProjectSummaryScreen(currentRepo: Repo?) {
                     Icons.Rounded.Star,
                     contentDescription = "Star",
                     modifier = Modifier.size(16.dp),
-                    tint = Orange
+                    tint = Color.White
                 )
 
                 EmptySpace(6)
@@ -172,12 +187,12 @@ fun ProjectSummaryScreen(currentRepo: Repo?) {
                     color = Color.White.copy(alpha = 0.7f)
                 )
 
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(Color.Cyan)
-                ) {}
+                Image(
+                    painter = painterResource(R.drawable.fork_icon),
+                    modifier = Modifier.size(22.dp),
+                    contentDescription = "",
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
 
                 EmptySpace(6)
 

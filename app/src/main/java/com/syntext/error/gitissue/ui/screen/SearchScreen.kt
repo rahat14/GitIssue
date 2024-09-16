@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -45,17 +46,25 @@ fun RepoSearchScreen(
 ) {
     val focusManager = LocalFocusManager.current
     var searchText by rememberSaveable { mutableStateOf("") }
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                MaterialTheme.colorScheme.onBackground
+            )
+    ) {
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 "GitIssue",
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineLarge,
+                color = Color.White
             )
 
             EmptySpace(35)
@@ -65,11 +74,11 @@ fun RepoSearchScreen(
                 onValueChange = {
                     searchText = it
                 },
-                singleLine = true,
+                singleLine = false ,
                 placeholder = {
                     Text(
-                        "Search For Repositories",
-                        style = MaterialTheme.typography.bodyLarge
+                        "Search Repositories",
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 },
                 leadingIcon = {
@@ -91,7 +100,7 @@ fun RepoSearchScreen(
                     }
                 },
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(horizontal = 8.dp, vertical = 16.dp)
                     .fillMaxWidth()
                     .background(Color(0xFFF0F0F0), RoundedCornerShape(25.dp))
                     .clip(RoundedCornerShape(25.dp)),
@@ -116,7 +125,7 @@ fun RepoSearchScreen(
                     }
                 ),
 
-            )
+                )
 
             EmptySpace()
 
@@ -148,7 +157,7 @@ fun SearchButton(onSearchClick: () -> Unit) {
             focusedElevation = 6.dp
         ),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF6200EE),
+            containerColor = Color.Black,
             contentColor = Color.White
         ),
         modifier = Modifier
@@ -157,7 +166,7 @@ fun SearchButton(onSearchClick: () -> Unit) {
 
     ) {
 
-        Text("Search", modifier = Modifier.padding(horizontal = 48.dp))
+        Text("Search", modifier = Modifier.padding(horizontal = 48.dp) , style = MaterialTheme.typography.bodyMedium )
     }
 }
 

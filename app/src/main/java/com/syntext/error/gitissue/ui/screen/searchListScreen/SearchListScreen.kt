@@ -190,7 +190,7 @@ fun SearchListScreen(
 
     // load more if scrolled to bottom
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && repoList.size > 16) {
+        if (reachedBottom && repoList.size >= 16) {
             onLoadMore()
         }
     }

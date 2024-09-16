@@ -32,9 +32,11 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun ProjectIssueListScreen(currentRepo: Repo?,
-                           onNavigateBack: () -> Boolean ,
-                           onNavigateToIssueDetails: (title: String, body: String, userName: String, userImage: String) -> Unit ) {
+fun ProjectIssueListScreen(
+    currentRepo: Repo?,
+    onNavigateBack: () -> Boolean,
+    onNavigateToIssueDetails: (title: String, body: String, userName: String, userImage: String) -> Unit
+) {
 
     val viewModel: RepoIssueViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -75,7 +77,12 @@ fun ProjectIssueListScreen(currentRepo: Repo?,
             },
             onRepoTap = { issue ->
 
-                onNavigateToIssueDetails(issue.title ?: "" , issue.body ?: "", issue.user?.login ?: "", issue.user?.avatar_url ?: "")
+                onNavigateToIssueDetails(
+                    issue.title ?: "",
+                    issue.body ?: "",
+                    issue.user?.login ?: "",
+                    issue.user?.avatar_url ?: ""
+                )
 
             },
 
@@ -107,11 +114,12 @@ fun ProjectIssueListScreen(currentRepo: Repo?,
 
 
         TopBarWithSearch(
-            title = "${currentRepo?.name}' Issues",
+            title = "'${currentRepo?.name}' Issues",
             modifier = Modifier.align(alignment = Alignment.TopCenter),
             onSearch = { query ->
                 search = query
-                viewModel.postActions(RepoIssuesAction.SearchIssues(query = query)) },
+                viewModel.postActions(RepoIssuesAction.SearchIssues(query = query))
+            },
             onNavigateBack = { onNavigateBack() },
             onSearchCancel = {
                 viewModel.postActions(RepoIssuesAction.ToggleSearchOff)
@@ -147,7 +155,7 @@ fun ProjectIssueListScreenContent(
 
     // load more if scrolled to bottom
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && issueList.size > 16 ) {
+        if (reachedBottom && issueList.size > 16) {
             onLoadMore()
         }
     }
