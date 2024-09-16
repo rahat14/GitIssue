@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,16 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.serialization)
 }
+
+
+val apikeyPropertiesFile = rootProject.file("apikey.properties")
+val apikeyProperties = Properties()
+apikeyPropertiesFile.inputStream().use { inputStream ->
+    apikeyProperties.load(inputStream)
+}
+
+val apiKey = apikeyProperties.getProperty("git_token") ?: error("git_token not found in apikey.properties")
+
 
 android {
 
@@ -22,6 +34,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "git_token", apikeyProperties["git_token"].toString())
     }
 
     buildTypes {
@@ -42,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 //    composeOptions {
 //       // kotlinCompilerExtensionVersion = "1.5.1"
@@ -91,4 +105,5 @@ dependencies {
     implementation (libs.koin.core)
     implementation (libs.koin.androidx.compose)
     implementation(libs.koin.androidx.navigation)
+
 }

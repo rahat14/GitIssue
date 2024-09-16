@@ -18,10 +18,12 @@ activityCompose = "1.9.2"
 composeBom = "2024.09.01"
 composeNavigation = "2.8.0"
 loggingInterceptor = "4.9.1"
+securityCrypto = "1.1.0-alpha06"
 serialization = "1.6.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 ballast-core = { module = "io.github.copper-leaf:ballast-core", version.ref = "ballastRepository" }
 ballast-repository = { module = "io.github.copper-leaf:ballast-repository", version.ref = "ballastRepository" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
