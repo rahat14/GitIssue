@@ -3,6 +3,7 @@ package com.syntext.error.gitissue.repository
 import com.syntext.error.gitissue.data.IssueResp
 import com.syntext.error.gitissue.data.RepoReadMeResp
 import com.syntext.error.gitissue.data.RepoSearchResp
+import com.syntext.error.gitissue.data.SearchIssueResp
 import com.syntext.error.gitissue.networking.ApiResponse
 
 
@@ -28,7 +29,7 @@ interface GithubRemoteRepository {
         owner: String,
         query: String,
         page: Int
-    ): ApiResponse<IssueResp>
+    ): ApiResponse<SearchIssueResp>
 
 
 }

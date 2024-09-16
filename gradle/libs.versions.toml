@@ -6,6 +6,7 @@ composeMarkdown = "0.5.4"
 converterGson = "2.9.0"
 koinAndroid = "3.5.4"
 koinAndroidxCompose = "3.5.0"
+koinAndroidxNavigation = "3.5.0"
 koinCore = "3.5.4"
 kotlin = "2.0.10"
 coreKtx = "1.13.1"
@@ -42,6 +43,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroidxNavigation" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }

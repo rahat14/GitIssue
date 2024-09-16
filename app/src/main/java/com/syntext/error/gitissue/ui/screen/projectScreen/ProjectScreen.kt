@@ -1,6 +1,6 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen
 
-import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
@@ -31,19 +31,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.syntext.error.gitissue.data.Repo
 import com.syntext.error.gitissue.ui.navigation.Screen
-import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.ProjectIssueListScreen
+import com.syntext.error.gitissue.ui.screen.projectScreen.screens.IssueDetailsScreen
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryScreen
+import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.ProjectIssueListScreen
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectScreenContainer(
     currentRepo: Repo?,
@@ -52,16 +52,17 @@ fun ProjectScreenContainer(
 
     val navController = rememberNavController()
     Scaffold(
-        topBar = {
-            AppBar(currentRepo, navController) {
-                onNavigateBack()
-            }
-
-        },
         bottomBar = { ProjectBottomNavigation(navController) }
     ) { innerPadding ->
-        val modifier = Modifier.padding(innerPadding)
-        ProjectNavHost(navController, currentRepo, modifier)
+        val modifier =
+            Modifier.padding(PaddingValues(bottom = innerPadding.calculateBottomPadding()))
+        ProjectNavHost(
+            navController = navController,
+            currentRepo = currentRepo,
+            modifier = modifier,
+        ) {
+            onNavigateBack()
+        }
     }
 
 
@@ -108,7 +109,13 @@ fun ProjectBottomNavigation(navController: NavHostController) {
                 selected = selectedItemIndex == index, // You can handle selection state properly here
                 onClick = {
                     selectedItemIndex = index
-                    navController.navigate(screen.screen)
+                    navController.navigate(screen.screen) {
+                        restoreState = true
+                        launchSingleTop = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                    }
                 },
                 colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
             )
@@ -121,7 +128,8 @@ fun ProjectBottomNavigation(navController: NavHostController) {
 fun ProjectNavHost(
     navController: NavHostController,
     currentRepo: Repo?,
-    modifier: Modifier
+    modifier: Modifier,
+    onNavigateBack: () -> Boolean
 ) {
     NavHost(
         navController = navController,
@@ -136,14 +144,38 @@ fun ProjectNavHost(
 
         // Issue Screen
         composable<Screen.IssueScreen> {
-            ProjectIssueListScreen(currentRepo)
+            ProjectIssueListScreen(currentRepo, onNavigateBack = onNavigateBack,
+                onNavigateToIssueDetails = { title, body, userName, userImage ->
+                    navController.navigate(
+                        Screen.IssueDetailsScreen(
+                            title = title,
+                            body,
+                            userName,
+                            userImage
+                        )
+                    ) {
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable<Screen.IssueDetailsScreen> {
+            val args = it.toRoute<Screen.IssueDetailsScreen>()
+
+            IssueDetailsScreen(
+                title = args.title,
+                body = args.body,
+                userName = args.userName,
+                userImage = args.userImage,
+                onNavigateBack = {
+                    navController.navigateUp()
+                }
+
+            )
         }
     }
-}
-
-
-@Composable
-fun IssueDetailsScreen() {
 }
 
 
@@ -174,19 +206,19 @@ sealed class BottomNavItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(currentRepo: Repo?, navController: NavController, onNavigateBack: () -> Boolean) {
+fun AppBar(title: String, onNavigateBack: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+//    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
-    Log.d(
-        "TAG",
-        "onCreate:  ${Screen::class.qualifiedName} ${navController.currentDestination?.route.toString()}"
-    )
+//    Log.d(
+//        "TAG",
+//        "onCreate:  ${Screen::class.qualifiedName} ${navController.currentDestination?.route.toString()}"
+//    )
     //   if (currentDestination?.route == Screen.IssueScreen::class.qualifiedName) {
     TopAppBar(
         title = {
             Text(
-                text = currentRepo?.name ?: "N/A",
+                text = title,
                 color = Color.White,
                 fontSize = 14.sp
             )

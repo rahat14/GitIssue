@@ -1,5 +1,6 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.syntext.error.gitissue.networking.ApiResponse
@@ -17,7 +18,7 @@ class RepoIssueViewmodel(
     private val gitRepo: GithubRemoteRepository,
 ) : ViewModel() {
 
-    var initialPage = 1
+    private var initialPage = 1
 
     private val _state: MutableStateFlow<RepoIssuesListState> =
         MutableStateFlow(RepoIssuesListState())
@@ -32,6 +33,8 @@ class RepoIssueViewmodel(
         when (action) {
             is RepoIssuesAction.GetInitialIssues -> {
 
+                Log.d("TAG", "postActions: i ma ere  ")
+
                 if (action.currentRepo.id == _state.value.currentRepo?.id) {
                     return@launch
                 }
@@ -42,8 +45,8 @@ class RepoIssueViewmodel(
 
 
                 val response = gitRepo.getRepoIssues(
-                    _state.value.currentRepo?.name ?: "",
-                    _state.value.currentRepo?.owner?.login ?: ""
+                    action.currentRepo.name ?: "",
+                    action.currentRepo.owner?.login ?: ""
                 )
 
                 when (response) {
@@ -75,7 +78,7 @@ class RepoIssueViewmodel(
                 initialPage += 1
 
                 _state.update {
-                    it.copy(isLoadMore = true)
+                    it.copy(isLoadMore = true, isSearchOn = false)
                 }
 
                 val response = gitRepo.getRepoIssues(
@@ -87,9 +90,8 @@ class RepoIssueViewmodel(
                     is ApiResponse.Success -> {
                         _state.update {
                             it.copy(
-                                issueList = response.data + it.issueList,
-                                isLoadMore = false,
-                                isEmpty = response.data.isEmpty()
+                                issueList = it.issueList + response.data,
+                                isLoadMore = false
                             )
                         }
                     }
@@ -103,7 +105,6 @@ class RepoIssueViewmodel(
                         }
                     }
 
-
                 }
 
 
@@ -114,7 +115,7 @@ class RepoIssueViewmodel(
                 initialPage += 1
 
                 _state.update {
-                    it.copy(isLoadMore = true)
+                    it.copy(isLoadMore = true, isSearchOn = true, isLoading = false)
                 }
 
 
@@ -128,9 +129,9 @@ class RepoIssueViewmodel(
                     is ApiResponse.Success -> {
                         _state.update {
                             it.copy(
-                                currentSearchList = response.data + it.currentSearchList,
-                                isLoadMore = false,
-                                isEmpty = response.data.isEmpty()
+                                currentSearchList = it.currentSearchList + (response.data.items
+                                    ?: emptyList()),
+                                isLoadMore = false
                             )
                         }
                     }
@@ -153,7 +154,7 @@ class RepoIssueViewmodel(
                 initialPage = 1
 
                 _state.update {
-                    it.copy(isLoading = true, isSearchOn = true)
+                    it.copy(isLoading = true, isSearchOn = true, isLoadMore = false)
                 }
 
 
@@ -167,9 +168,9 @@ class RepoIssueViewmodel(
                     is ApiResponse.Success -> {
                         _state.update {
                             it.copy(
-                                currentSearchList = response.data,
+                                currentSearchList = response.data.items ?: emptyList(),
                                 isLoading = false,
-                                isEmpty = response.data.isEmpty()
+                                isEmpty = response.data.items.isNullOrEmpty()
                             )
                         }
                     }
@@ -187,7 +188,7 @@ class RepoIssueViewmodel(
 
             }
 
-            RepoIssuesAction.toggleSearchOff -> {
+            is RepoIssuesAction.ToggleSearchOff -> {
                 _state.update {
                     it.copy(isSearchOn = false, currentSearchList = emptyList())
                 }

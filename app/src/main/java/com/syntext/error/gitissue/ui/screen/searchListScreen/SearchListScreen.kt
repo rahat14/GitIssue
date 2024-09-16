@@ -87,7 +87,7 @@ fun SearchListContainer(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.TopCenter,
 
         ) {
 
@@ -140,10 +140,16 @@ fun SearchListContainer(
         AnimatedVisibility(
             state.isLoading
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.TopEnd),
-                color = Color.White,
-            )
+
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Color.White,
+                )
+            }
+
 
         }
 
@@ -167,7 +173,7 @@ fun SearchListContainer(
 @Composable
 fun SearchListScreen(
     modifier: Modifier = Modifier,
-            repoList: List<Repo> = emptyList(),
+    repoList: List<Repo> = emptyList(),
     isBottomLoading: Boolean = false,
     onLoadMore: () -> Unit,
     onRepoTap: (repo: Repo) -> Unit
@@ -184,7 +190,7 @@ fun SearchListScreen(
 
     // load more if scrolled to bottom
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom) {
+        if (reachedBottom && repoList.size > 16) {
             onLoadMore()
         }
     }

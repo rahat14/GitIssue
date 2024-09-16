@@ -7,5 +7,5 @@ sealed class RepoIssuesAction {
     data class SearchIssues(val query: String) : RepoIssuesAction()
     data object LoadMoreIssues : RepoIssuesAction()
     data class LoadMoreSearchIssues(val query: String) : RepoIssuesAction()
-    data object toggleSearchOff : RepoIssuesAction()
+    data object ToggleSearchOff : RepoIssuesAction()
 }

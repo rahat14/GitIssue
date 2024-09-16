@@ -3,6 +3,7 @@ package com.syntext.error.gitissue.repository
 import com.syntext.error.gitissue.data.IssueResp
 import com.syntext.error.gitissue.data.RepoReadMeResp
 import com.syntext.error.gitissue.data.RepoSearchResp
+import com.syntext.error.gitissue.data.SearchIssueResp
 import com.syntext.error.gitissue.networking.ApiResponse
 import com.syntext.error.gitissue.networking.safeApiCall
 import com.syntext.error.gitissue.services.GitApiService
@@ -39,9 +40,9 @@ class GithubRemoteRepositoryImpl(private val apiService: GitApiService) : Github
         owner: String,
         query: String,
         page: Int
-    ): ApiResponse<IssueResp> {
+    ): ApiResponse<SearchIssueResp> {
         return safeApiCall {
-            apiService.searchRepoIssues(query = "$query+repo:$repoName/$owner" , page =  page)
+            apiService.searchRepoIssues(url = "https://api.github.com/search/issues?q=$query+repo:$owner/$repoName&page=$page&per_page=16")
         }
     }
 }

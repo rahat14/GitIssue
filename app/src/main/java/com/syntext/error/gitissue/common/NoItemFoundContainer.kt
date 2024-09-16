@@ -25,7 +25,8 @@ fun NoItemFoundContainer(
     message: String = "No items found.",
     imageVector: ImageVector = Icons.Default.Search,
     contentDescription: String = "No items found icon",
-    onSearchAgain: () -> Unit
+    onSearchAgain: () -> Unit = {},
+    showActionBtn  : Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -54,11 +55,13 @@ fun NoItemFoundContainer(
 
         EmptySpace(16)
 
-        Button(
-            onClick = { onSearchAgain() },
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text("Search Again")
+        if(showActionBtn){
+            Button(
+                onClick = { onSearchAgain() },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Search Again")
+            }
         }
     }
 }

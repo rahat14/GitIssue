@@ -80,10 +80,8 @@ class SearchListViewmodel(
                     it.copy(currentQuery = action.query , isLoading = true)
                 }
 
-
                 searchPage = 1
                 val response = gitRepo.searchRepo(query = action.query, page = searchPage)
-
 
                 when (response) {
                     is ApiResponse.Success -> {

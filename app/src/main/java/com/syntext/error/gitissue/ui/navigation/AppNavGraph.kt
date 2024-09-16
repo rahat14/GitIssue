@@ -1,6 +1,5 @@
 package com.syntext.error.gitissue.ui.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -21,18 +20,21 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController = rememberNavController() , modifier: Modifier = Modifier) {
+fun AppNavGraph(
+    navController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
+) {
     val sharedViewModel: SharedViewModel = koinViewModel()
 
-    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen ) {
+    NavHost(navController = navController, startDestination = Screen.RepoSearchScreen) {
 
         // Repo Search Screen
         composable<Screen.RepoSearchScreen> {
             RepoSearchScreen(
                 onNavigateToRepoList = { query ->
                     navController.navigate(Screen.SearchListContainer(query = query))
-                    Log.d("TAG", "AppNavGraph : ${navController.currentDestination?.displayName.toString()} ${navController.currentDestination?.parent} ${navController.currentDestination?.navigatorName}")
-                                       },
+
+                },
             )
         }
 
@@ -99,4 +101,12 @@ sealed class Screen {
 
     @Serializable
     data object IssueScreen : Screen()
+
+    @Serializable
+    data class IssueDetailsScreen(
+        val title: String,
+        val body: String,
+        val userName: String,
+        val userImage: String,
+    ) : Screen()
 }
