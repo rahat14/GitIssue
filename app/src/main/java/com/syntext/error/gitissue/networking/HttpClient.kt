@@ -1,23 +1,21 @@
 package com.syntext.error.gitissue.networking
 
-import android.util.Log
 import com.syntext.error.gitissue.BuildConfig
+import com.syntext.error.gitissue.utils.decodeBase64ToString
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.TimeUnit
 
 class HttpClient {
 
 
-
     companion object {
 
-        fun provideClient() : OkHttpClient {
+        fun provideClient(): OkHttpClient {
 
-            val httpClient =  OkHttpClient.Builder()
+            val httpClient = OkHttpClient.Builder()
 
-             val consumerKey = BuildConfig.git_token;
+            val consumerKey = decodeBase64ToString( BuildConfig.git_token)
 
 
             httpClient.addInterceptor { chain ->
@@ -25,7 +23,7 @@ class HttpClient {
                     chain.request().newBuilder().also {
                         it.addHeader("Accept", "application/json")
                         it.addHeader("User-Agent", "Git-Issue")
-                        it.addHeader( "Authorization","token $consumerKey")
+                        it.addHeader("Authorization", "token $consumerKey")
                     }
 
                         .build()
@@ -36,7 +34,7 @@ class HttpClient {
             httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
 
 
-            return  httpClient.build()
+            return httpClient.build()
 
         }
 
