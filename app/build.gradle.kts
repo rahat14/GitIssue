@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 plugins {
@@ -6,6 +8,7 @@ plugins {
     // Existing plugins
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("de.mannodermaus.android-junit5") version "1.11.0.0"
 }
 
 
@@ -30,14 +33,17 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "org.junit.runners.JUnit4" // Use JUnit 4 for instrumentation tests
+        testInstrumentationRunnerArguments["runnerBuilder"] =  "de.mannodermaus.junit5.AndroidJUnit5Builder"// Use JUnit 5 for local unit tests
         vectorDrawables {
             useSupportLibrary = true
         }
         buildConfigField("String", "git_token", apikeyProperties["git_token"].toString())
+
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -68,6 +74,10 @@ android {
 
 }
 
+
+
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -78,7 +88,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
+    testImplementation(libs.jupiter.junit.jupiter)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -106,4 +117,14 @@ dependencies {
     implementation (libs.koin.androidx.compose)
     implementation(libs.koin.androidx.navigation)
 
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.engine)
+    testImplementation (libs.mockk)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
 }
+
+
