@@ -1,6 +1,5 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -31,9 +30,7 @@ import com.syntext.error.gitissue.data.Repo
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen.ProjectSummaryEvent
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.widgets.IssueItem
 import com.syntext.error.gitissue.ui.screen.projectScreen.screens.repoIssueList.widgets.TopBarWithSearch
-import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListAction
-import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListEvent
-import com.syntext.error.gitissue.utils.observeAsActions
+import com.syntext.error.gitissue.utils.ObserveAsActions
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -59,7 +56,7 @@ fun ProjectIssueListScreen(
         }
     }
 
-    viewModel.actions.observeAsActions { repoIssueEvent ->
+    viewModel.actions.ObserveAsActions { repoIssueEvent ->
         when (repoIssueEvent) {
 
             ProjectSummaryEvent.DoNothing -> {

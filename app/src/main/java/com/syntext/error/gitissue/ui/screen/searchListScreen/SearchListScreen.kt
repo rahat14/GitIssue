@@ -52,7 +52,7 @@ import com.syntext.error.gitissue.common.NoItemFoundContainer
 import com.syntext.error.gitissue.data.Repo
 import com.syntext.error.gitissue.ui.theme.Orange
 import com.syntext.error.gitissue.ui.theme.TextColorGray
-import com.syntext.error.gitissue.utils.observeAsActions
+import com.syntext.error.gitissue.utils.ObserveAsActions
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -73,7 +73,7 @@ fun SearchListContainer(
     }
 
 
-    viewModel.actions.observeAsActions { searchListEvent ->
+    viewModel.actions.ObserveAsActions { searchListEvent ->
         when (searchListEvent) {
             is SearchListEvent.NavigateBack -> {
                 onNavigateBack()

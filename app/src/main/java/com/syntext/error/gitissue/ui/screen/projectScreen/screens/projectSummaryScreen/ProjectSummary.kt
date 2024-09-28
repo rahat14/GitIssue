@@ -1,6 +1,5 @@
 package com.syntext.error.gitissue.ui.screen.projectScreen.screens.projectSummaryScreen
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Share
@@ -31,7 +29,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -46,11 +43,8 @@ import com.syntext.error.gitissue.common.CommonDialog
 import com.syntext.error.gitissue.common.EmptySpace
 import com.syntext.error.gitissue.common.MarkDownViewer
 import com.syntext.error.gitissue.data.Repo
-import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListAction
-import com.syntext.error.gitissue.ui.screen.searchListScreen.SearchListEvent
-import com.syntext.error.gitissue.ui.theme.Orange
 import com.syntext.error.gitissue.ui.theme.TextColorGray
-import com.syntext.error.gitissue.utils.observeAsActions
+import com.syntext.error.gitissue.utils.ObserveAsActions
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,15 +53,15 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
     val viewModel: ProjectSummaryViewmodel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
-    viewModel.actions.observeAsActions { projectSummeryEvent ->
+    viewModel.actions.ObserveAsActions { projectSummeryEvent ->
         when (projectSummeryEvent) {
-            ProjectSummaryEvent.DoNothing ->{}
+            ProjectSummaryEvent.DoNothing -> {}
         }
     }
 
-    if(state.errorMessage != null){
+    if (state.errorMessage != null) {
         CommonDialog(
-            message = state.errorMessage ?: "" ,
+            message = state.errorMessage ?: "",
             onConfirm = {
                 viewModel.postActions(ProjectSummaryAction.InitDoNothing)
             },
@@ -78,8 +72,7 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
     LaunchedEffect(currentRepo) {
         viewModel.postActions(
             ProjectSummaryAction.GetReadme(
-                owner = currentRepo?.owner?.login ?: "",
-                repoName = currentRepo?.name ?: ""
+                owner = currentRepo?.owner?.login ?: "", repoName = currentRepo?.name ?: ""
             )
         )
     }
@@ -97,8 +90,7 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
         val modifier = Modifier.padding(horizontal = 8.dp)
 
         AppBar(
-            modifier = Modifier.align(Alignment.TopCenter),
-            title = currentRepo?.name ?: "n?a"
+            modifier = Modifier.align(Alignment.TopCenter), title = currentRepo?.name ?: "n?a"
         ) { onNavigateBack() }
 
 
@@ -133,24 +125,17 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
             }
 
             Text(
-                currentRepo?.name ?: "N?A",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Medium,
-                    color = Color.White
-                ),
-                modifier = modifier.padding(vertical = 8.dp)
+                currentRepo?.name ?: "N?A", style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Medium, color = Color.White
+                ), modifier = modifier.padding(vertical = 8.dp)
             )
 
 
 
             Text(
-                currentRepo?.description ?: "N?A",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color.White.copy(alpha = 0.7f),
-                    fontSize = 13.sp,
-                    letterSpacing = 1.5.sp
-                ),
-                modifier = modifier
+                currentRepo?.description ?: "N?A", style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp, letterSpacing = 1.5.sp
+                ), modifier = modifier
             )
 
             EmptySpace(12)
@@ -170,9 +155,7 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
                 Text(
                     currentRepo?.html_url ?: "N?A",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        letterSpacing = 1.5.sp
+                        color = Color.White, fontSize = 14.sp, letterSpacing = 1.5.sp
                     ),
                 )
 
@@ -240,25 +223,19 @@ fun ProjectSummaryScreen(currentRepo: Repo?, onNavigateBack: () -> Boolean) {
             )
 
             Text(
-                "README.md",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color.White.copy(alpha = 0.7f),
-                    fontSize = 13.sp,
-                    letterSpacing = 1.5.sp
-                ),
-                modifier = modifier
+                "README.md", style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp, letterSpacing = 1.5.sp
+                ), modifier = modifier
             )
 
             AnimatedVisibility(
                 state.isLoading
             ) {
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
+                        color = Color.White, modifier = Modifier.align(Alignment.Center)
                     )
                 }
             }
